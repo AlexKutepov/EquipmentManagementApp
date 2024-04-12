@@ -15,6 +15,11 @@ namespace EquipmentManagementApp
             equipmentList = new List<Equipment>();
         }
 
+        public List<Equipment> GetEquipmentList()
+        {
+            return equipmentList;
+        }
+
         public void AddEquipment(Equipment equipment)
         {
             equipmentList.Add(equipment);
@@ -23,6 +28,16 @@ namespace EquipmentManagementApp
         public void RemoveEquipment(string serialNumber)
         {
             equipmentList.RemoveAll(e => e.SerialNumber == serialNumber);
+        }
+
+        public void UpdateEquipment(Equipment updatedEquipment)
+        {
+         
+            int index = equipmentList.FindIndex(e => e.SerialNumber == updatedEquipment.SerialNumber);
+            if (index != -1)
+            {
+                equipmentList[index] = updatedEquipment;
+            }
         }
 
         public void MoveEquipmentToLocation(string serialNumber, Location newLocation)
@@ -37,7 +52,7 @@ namespace EquipmentManagementApp
 
         public List<Equipment> SearchByLocation(string location)
         {
-            return equipmentList.Where(e => e.Location.Name == location).ToList();
+            return equipmentList.Where(e => e.Location != null && e.Location.Name == location).ToList();
         }
 
         public List<Equipment> SearchByCategory(string category)
@@ -58,10 +73,10 @@ namespace EquipmentManagementApp
                 var worksheet = package.Workbook.Worksheets.Add("Equipment");
 
                 // Headers
-                worksheet.Cells[1, 1].Value = "Serial Number";
-                worksheet.Cells[1, 2].Value = "Name";
-                worksheet.Cells[1, 3].Value = "Category";
-                worksheet.Cells[1, 4].Value = "Is Functional";
+                worksheet.Cells[1, 1].Value = "Серийный номер";
+                worksheet.Cells[1, 2].Value = "Имя";
+                worksheet.Cells[1, 3].Value = "Категория";
+                worksheet.Cells[1, 4].Value = "Рабочий?";
 
                 // Data
                 int row = 2;
@@ -70,7 +85,7 @@ namespace EquipmentManagementApp
                     worksheet.Cells[row, 1].Value = equipment.SerialNumber;
                     worksheet.Cells[row, 2].Value = equipment.Name;
                     worksheet.Cells[row, 3].Value = equipment.Category;
-                    worksheet.Cells[row, 4].Value = equipment.IsFunctional ? "Yes" : "No";
+                    worksheet.Cells[row, 4].Value = equipment.IsFunctional ? "Нет" : "Да";
                     row++;
                 }
 

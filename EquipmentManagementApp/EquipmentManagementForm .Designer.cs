@@ -53,6 +53,7 @@ namespace EquipmentManagementApp
             this.txtSerialNumber.Size = new System.Drawing.Size(220, 20);
             this.txtSerialNumber.TabIndex = 0;
             this.txtSerialNumber.Text = "ввод серийного номера";
+            this.txtSerialNumber.TextChanged += new System.EventHandler(this.txtSerialNumber_TextChanged);
             // 
             // txtName
             // 
@@ -88,6 +89,7 @@ namespace EquipmentManagementApp
             this.btnAddEquipment.TabIndex = 4;
             this.btnAddEquipment.Text = "Добавить новую позицию";
             this.btnAddEquipment.UseVisualStyleBackColor = true;
+            this.btnAddEquipment.Click += new System.EventHandler(this.btnAddEquipment_Click_1);
             // 
             // btnRemoveEquipment
             // 
@@ -97,6 +99,7 @@ namespace EquipmentManagementApp
             this.btnRemoveEquipment.TabIndex = 5;
             this.btnRemoveEquipment.Text = "Удалить выбранную позициюУдалить выбранную позицию";
             this.btnRemoveEquipment.UseVisualStyleBackColor = true;
+            this.btnRemoveEquipment.Click += new System.EventHandler(this.btnRemoveEquipment_Click_1);
             // 
             // btnEditEquipment
             // 
@@ -106,6 +109,7 @@ namespace EquipmentManagementApp
             this.btnEditEquipment.TabIndex = 6;
             this.btnEditEquipment.Text = "Редактировать выбранную позициюУдалить выбранную позицию";
             this.btnEditEquipment.UseVisualStyleBackColor = true;
+            this.btnEditEquipment.Click += new System.EventHandler(this.btnEditEquipment_Click_1);
             // 
             // btnMoveEquipment
             // 
@@ -115,6 +119,7 @@ namespace EquipmentManagementApp
             this.btnMoveEquipment.TabIndex = 7;
             this.btnMoveEquipment.Text = "Переместить выбранную позициюУдалить выбранную позицию";
             this.btnMoveEquipment.UseVisualStyleBackColor = true;
+            this.btnMoveEquipment.Click += new System.EventHandler(this.btnMoveEquipment_Click_1);
             // 
             // btnSearchByLocation
             // 
@@ -160,6 +165,7 @@ namespace EquipmentManagementApp
             this.btnExportToExcel.TabIndex = 12;
             this.btnExportToExcel.Text = "экспорт данных в Excel";
             this.btnExportToExcel.UseVisualStyleBackColor = true;
+            this.btnExportToExcel.Click += new System.EventHandler(this.btnExportToExcel_Click_1);
             // 
             // dataListViewEquipment
             // 
@@ -172,6 +178,7 @@ namespace EquipmentManagementApp
             this.dataListViewEquipment.TabIndex = 13;
             this.dataListViewEquipment.UseCompatibleStateImageBehavior = false;
             this.dataListViewEquipment.View = System.Windows.Forms.View.Details;
+            this.dataListViewEquipment.SelectedIndexChanged += new System.EventHandler(this.dataListViewEquipment_SelectedIndexChanged);
             // 
             // Form1
             // 
