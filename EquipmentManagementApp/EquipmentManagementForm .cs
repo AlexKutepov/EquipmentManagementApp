@@ -17,6 +17,14 @@ namespace EquipmentManagementApp
             InitializeComponent();
         }
 
-      
+        private void btnSearchByCategory_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnSearchByLocation_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
