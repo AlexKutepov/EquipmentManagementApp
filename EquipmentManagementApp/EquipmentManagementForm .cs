@@ -26,6 +26,7 @@ namespace EquipmentManagementApp
             dataListViewEquipment.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
         }
 
+
         private void ImportDataFromExcel()
         {
             string filePath = "Equipment.xlsx"; // Путь к файлу Excel
@@ -51,13 +52,13 @@ namespace EquipmentManagementApp
 
         private void ClearFields()
         {
-            txtSerialNumber.Text = "";
-            txtName.Text = "";
-            txtCategory.Text = "";
+            txtSerialNumber.Text = "ввод серийного номера";
+            txtName.Text = "ввод названия";
+            txtCategory.Text = "ввод категории";
             chkIsFunctional.Checked = false;
-            txtLocationName.Text = "";
-            txtlocationNumber.Text = "";
-            txtLocationSegment.Text = "";
+            txtLocationName.Text = "Название склада/Фио отвественного";
+            txtlocationNumber.Text = "Номер склада/отвественного (число)";
+            txtLocationSegment.Text = "Имя физ.лица/наименование юр.лица";
         }
 
         // В классе Form1 добавим текстовые поля для ввода местоположения
@@ -101,6 +102,7 @@ namespace EquipmentManagementApp
 
                 ClearFields();
                 InitializeDataListView();
+                MessageBox.Show("Позиция добавлена", "Сообщение", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception ex)
             {
@@ -117,6 +119,7 @@ namespace EquipmentManagementApp
             {
                 equipmentManager.RemoveEquipment(selectedEquipment.SerialNumber);
                 InitializeDataListView();
+                MessageBox.Show("Позиция удалена", "Сообщение", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 
@@ -131,6 +134,7 @@ namespace EquipmentManagementApp
                 equipmentManager.UpdateEquipment(selectedEquipment);
                 ClearFields();
                 InitializeDataListView();
+                MessageBox.Show("Позиция отредактирована", "Сообщение", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 
@@ -142,6 +146,8 @@ namespace EquipmentManagementApp
                 // Логика перемещения оборудования
                 // Например, можно вызвать метод ReallocateEquipment, если он уже реализован в классе EquipmentManager
                 // equipmentManager.ReallocateEquipment(selectedEquipment.SerialNumber, newLocation);
+                MessageBox.Show("Позиция перемещена", "Сообщение", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
             }
         }
         private void dataListViewEquipment_SelectedIndexChanged(object sender, EventArgs e)

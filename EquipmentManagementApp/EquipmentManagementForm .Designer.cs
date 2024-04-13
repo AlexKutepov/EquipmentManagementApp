@@ -163,7 +163,7 @@ namespace EquipmentManagementApp
             // 
             // btnExportToExcel
             // 
-            this.btnExportToExcel.Location = new System.Drawing.Point(10, 403);
+            this.btnExportToExcel.Location = new System.Drawing.Point(10, 370);
             this.btnExportToExcel.Name = "btnExportToExcel";
             this.btnExportToExcel.Size = new System.Drawing.Size(217, 23);
             this.btnExportToExcel.TabIndex = 12;
