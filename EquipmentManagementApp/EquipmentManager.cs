@@ -74,9 +74,12 @@ namespace EquipmentManagementApp
 
                 // Headers
                 worksheet.Cells[1, 1].Value = "Серийный номер";
-                worksheet.Cells[1, 2].Value = "Имя";
+                worksheet.Cells[1, 2].Value = "Наименование";
                 worksheet.Cells[1, 3].Value = "Категория";
-                worksheet.Cells[1, 4].Value = "Рабочий?";
+                worksheet.Cells[1, 4].Value = "Рабочий/не рабочий";
+                worksheet.Cells[1, 5].Value = "Номер склада/отвественного";
+                worksheet.Cells[1, 6].Value = "Название склада/Фио отвественного";
+                worksheet.Cells[1, 7].Value = "Имя физ.лица/наименование юр.лица";
 
                 // Data
                 int row = 2;
@@ -86,6 +89,9 @@ namespace EquipmentManagementApp
                     worksheet.Cells[row, 2].Value = equipment.Name;
                     worksheet.Cells[row, 3].Value = equipment.Category;
                     worksheet.Cells[row, 4].Value = equipment.IsFunctional ? "Нет" : "Да";
+                    worksheet.Cells[row, 5].Value = equipment.Location.Number;
+                    worksheet.Cells[row, 6].Value = equipment.Location.Name;
+                    worksheet.Cells[row, 7].Value = equipment.Location.Segment;
                     row++;
                 }
 
@@ -107,7 +113,10 @@ namespace EquipmentManagementApp
                     string serialNumber = worksheet.Cells[row, 1].Value?.ToString();
                     string name = worksheet.Cells[row, 2].Value?.ToString();
                     string category = worksheet.Cells[row, 3].Value?.ToString();
-                    bool isFunctional = worksheet.Cells[row, 4].Value?.ToString() == "Yes";
+                    bool isFunctional = worksheet.Cells[row, 4].Value?.ToString() == "Да";
+                    int locationNumber = int.Parse(worksheet.Cells[row, 5].Value?.ToString());
+                    string locationName = worksheet.Cells[row, 6].Value?.ToString();
+                    string locationSegment = worksheet.Cells[row, 7].Value?.ToString();
 
                     if (!string.IsNullOrEmpty(serialNumber) && !string.IsNullOrEmpty(name) && !string.IsNullOrEmpty(category))
                     {
@@ -116,12 +125,20 @@ namespace EquipmentManagementApp
                             SerialNumber = serialNumber,
                             Name = name,
                             Category = category,
-                            IsFunctional = isFunctional
+                            IsFunctional = isFunctional,
+                            Location = new Location
+                            {
+                                Number = locationNumber,
+                                Name = locationName,
+                                Segment = locationSegment
+                            }
                         };
                         equipmentList.Add(equipment);
                     }
                 }
             }
         }
+
+
     }
 }

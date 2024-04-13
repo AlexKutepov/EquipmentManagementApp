@@ -19,7 +19,7 @@ namespace EquipmentManagementApp
 
         public void Move(Location newLocation)
         {
-            Console.WriteLine($"Equipment {Name} has been moved to {newLocation.Name}.");
+            Console.WriteLine($"Оборудование {Name} перемещено на новую локацию: {newLocation.Name}.");
         }
     }
 }

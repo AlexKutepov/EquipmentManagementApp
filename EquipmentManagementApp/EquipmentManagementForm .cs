@@ -55,8 +55,12 @@ namespace EquipmentManagementApp
             txtName.Text = "";
             txtCategory.Text = "";
             chkIsFunctional.Checked = false;
+            txtLocationName.Text = "";
+            txtlocationNumber.Text = "";
+            txtLocationSegment.Text = "";
         }
 
+        // В классе Form1 добавим текстовые поля для ввода местоположения
         private void btnAddEquipment_Click_1(object sender, EventArgs e)
         {
             try
@@ -65,13 +69,32 @@ namespace EquipmentManagementApp
                 string name = txtName.Text;
                 string category = txtCategory.Text;
                 bool isFunctional = chkIsFunctional.Checked;
+                string locationName = txtLocationName.Text; 
+                int locationNumber = 0;
+                string locationSegment = txtLocationSegment.Text;
+                int.TryParse(txtlocationNumber.Text, out locationNumber);
+                // Валидация пользовательского ввода
+                if (string.IsNullOrWhiteSpace(serialNumber) || string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(category) ||
+                    string.IsNullOrWhiteSpace(locationName) || string.IsNullOrWhiteSpace(locationSegment) )
+                {
+                    MessageBox.Show("Пожалуйста, заполните все поля корректно.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+                
+                Location newLocation = new Location
+                {
+                    Number = locationNumber,
+                    Name = locationName,
+                    Segment = locationSegment
+                }; 
 
                 Equipment newEquipment = new Equipment
                 {
                     SerialNumber = serialNumber,
                     Name = name,
                     Category = category,
-                    IsFunctional = isFunctional
+                    IsFunctional = isFunctional,
+                    Location = newLocation
                 };
 
                 equipmentManager.AddEquipment(newEquipment);
@@ -85,6 +108,8 @@ namespace EquipmentManagementApp
                 LogError($"Ошибка добавления позиции: {ex.Message}");
             }
         }
+
+
         private void btnRemoveEquipment_Click_1(object sender, EventArgs e)
         {
             Equipment selectedEquipment = (Equipment)dataListViewEquipment.SelectedObject;
@@ -173,16 +198,13 @@ namespace EquipmentManagementApp
                 }
             }
         }
-
-        private void btnSaveToFile_Click(object sender, EventArgs e)
+        private void button1_Click(object sender, EventArgs e)
         {
-            // Путь к файлу, который вы хотите сохранить вместе с программой
-            string targetFilePath = "EquipmentData.xlsx";
+            string targetFilePath = "Equipment.xlsx";
 
             try
             {
                 equipmentManager.ExportToExcel(targetFilePath);
-                MessageBox.Show("Данные успешно сохранены в файл с программой!", "Сообщение", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception ex)
             {
@@ -212,5 +234,7 @@ namespace EquipmentManagementApp
                 MessageBox.Show($"Ошибка в логгирование ошибок : {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+
     }
 }

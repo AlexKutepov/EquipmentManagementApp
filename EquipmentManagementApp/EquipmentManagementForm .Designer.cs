@@ -43,6 +43,10 @@ namespace EquipmentManagementApp
             this.txtSearchCategory = new System.Windows.Forms.TextBox();
             this.btnExportToExcel = new System.Windows.Forms.Button();
             this.dataListViewEquipment = new BrightIdeasSoftware.DataListView();
+            this.btnSaveToFile = new System.Windows.Forms.Button();
+            this.txtLocationName = new System.Windows.Forms.TextBox();
+            this.txtlocationNumber = new System.Windows.Forms.TextBox();
+            this.txtLocationSegment = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataListViewEquipment)).BeginInit();
             this.SuspendLayout();
             // 
@@ -83,7 +87,7 @@ namespace EquipmentManagementApp
             // 
             // btnAddEquipment
             // 
-            this.btnAddEquipment.Location = new System.Drawing.Point(12, 115);
+            this.btnAddEquipment.Location = new System.Drawing.Point(10, 197);
             this.btnAddEquipment.Name = "btnAddEquipment";
             this.btnAddEquipment.Size = new System.Drawing.Size(220, 23);
             this.btnAddEquipment.TabIndex = 4;
@@ -93,7 +97,7 @@ namespace EquipmentManagementApp
             // 
             // btnRemoveEquipment
             // 
-            this.btnRemoveEquipment.Location = new System.Drawing.Point(12, 144);
+            this.btnRemoveEquipment.Location = new System.Drawing.Point(10, 226);
             this.btnRemoveEquipment.Name = "btnRemoveEquipment";
             this.btnRemoveEquipment.Size = new System.Drawing.Size(220, 23);
             this.btnRemoveEquipment.TabIndex = 5;
@@ -103,7 +107,7 @@ namespace EquipmentManagementApp
             // 
             // btnEditEquipment
             // 
-            this.btnEditEquipment.Location = new System.Drawing.Point(12, 173);
+            this.btnEditEquipment.Location = new System.Drawing.Point(10, 255);
             this.btnEditEquipment.Name = "btnEditEquipment";
             this.btnEditEquipment.Size = new System.Drawing.Size(220, 23);
             this.btnEditEquipment.TabIndex = 6;
@@ -113,7 +117,7 @@ namespace EquipmentManagementApp
             // 
             // btnMoveEquipment
             // 
-            this.btnMoveEquipment.Location = new System.Drawing.Point(12, 202);
+            this.btnMoveEquipment.Location = new System.Drawing.Point(10, 284);
             this.btnMoveEquipment.Name = "btnMoveEquipment";
             this.btnMoveEquipment.Size = new System.Drawing.Size(220, 23);
             this.btnMoveEquipment.TabIndex = 7;
@@ -123,7 +127,7 @@ namespace EquipmentManagementApp
             // 
             // btnSearchByLocation
             // 
-            this.btnSearchByLocation.Location = new System.Drawing.Point(235, 233);
+            this.btnSearchByLocation.Location = new System.Drawing.Point(233, 315);
             this.btnSearchByLocation.Name = "btnSearchByLocation";
             this.btnSearchByLocation.Size = new System.Drawing.Size(220, 23);
             this.btnSearchByLocation.TabIndex = 8;
@@ -133,7 +137,7 @@ namespace EquipmentManagementApp
             // 
             // txtLocation
             // 
-            this.txtLocation.Location = new System.Drawing.Point(12, 233);
+            this.txtLocation.Location = new System.Drawing.Point(10, 315);
             this.txtLocation.Name = "txtLocation";
             this.txtLocation.Size = new System.Drawing.Size(217, 20);
             this.txtLocation.TabIndex = 9;
@@ -141,7 +145,7 @@ namespace EquipmentManagementApp
             // 
             // btnSearchByCategory
             // 
-            this.btnSearchByCategory.Location = new System.Drawing.Point(235, 262);
+            this.btnSearchByCategory.Location = new System.Drawing.Point(233, 344);
             this.btnSearchByCategory.Name = "btnSearchByCategory";
             this.btnSearchByCategory.Size = new System.Drawing.Size(219, 23);
             this.btnSearchByCategory.TabIndex = 10;
@@ -151,7 +155,7 @@ namespace EquipmentManagementApp
             // 
             // txtSearchCategory
             // 
-            this.txtSearchCategory.Location = new System.Drawing.Point(12, 262);
+            this.txtSearchCategory.Location = new System.Drawing.Point(10, 344);
             this.txtSearchCategory.Name = "txtSearchCategory";
             this.txtSearchCategory.Size = new System.Drawing.Size(217, 20);
             this.txtSearchCategory.TabIndex = 11;
@@ -159,7 +163,7 @@ namespace EquipmentManagementApp
             // 
             // btnExportToExcel
             // 
-            this.btnExportToExcel.Location = new System.Drawing.Point(12, 298);
+            this.btnExportToExcel.Location = new System.Drawing.Point(10, 403);
             this.btnExportToExcel.Name = "btnExportToExcel";
             this.btnExportToExcel.Size = new System.Drawing.Size(217, 23);
             this.btnExportToExcel.TabIndex = 12;
@@ -174,17 +178,55 @@ namespace EquipmentManagementApp
             this.dataListViewEquipment.HideSelection = false;
             this.dataListViewEquipment.Location = new System.Drawing.Point(288, 12);
             this.dataListViewEquipment.Name = "dataListViewEquipment";
-            this.dataListViewEquipment.Size = new System.Drawing.Size(500, 203);
+            this.dataListViewEquipment.Size = new System.Drawing.Size(715, 203);
             this.dataListViewEquipment.TabIndex = 13;
             this.dataListViewEquipment.UseCompatibleStateImageBehavior = false;
             this.dataListViewEquipment.View = System.Windows.Forms.View.Details;
             this.dataListViewEquipment.SelectedIndexChanged += new System.EventHandler(this.dataListViewEquipment_SelectedIndexChanged);
             // 
+            // btnSaveToFile
+            // 
+            this.btnSaveToFile.Location = new System.Drawing.Point(288, 226);
+            this.btnSaveToFile.Name = "btnSaveToFile";
+            this.btnSaveToFile.Size = new System.Drawing.Size(217, 52);
+            this.btnSaveToFile.TabIndex = 14;
+            this.btnSaveToFile.Text = "сохранить изменения";
+            this.btnSaveToFile.UseVisualStyleBackColor = true;
+            this.btnSaveToFile.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // txtLocationName
+            // 
+            this.txtLocationName.Location = new System.Drawing.Point(13, 115);
+            this.txtLocationName.Name = "txtLocationName";
+            this.txtLocationName.Size = new System.Drawing.Size(219, 20);
+            this.txtLocationName.TabIndex = 15;
+            this.txtLocationName.Text = "Название склада/Фио отвественного";
+            // 
+            // txtlocationNumber
+            // 
+            this.txtlocationNumber.Location = new System.Drawing.Point(13, 141);
+            this.txtlocationNumber.Name = "txtlocationNumber";
+            this.txtlocationNumber.Size = new System.Drawing.Size(219, 20);
+            this.txtlocationNumber.TabIndex = 16;
+            this.txtlocationNumber.Text = "Номер склада/отвественного (число)";
+            // 
+            // txtLocationSegment
+            // 
+            this.txtLocationSegment.Location = new System.Drawing.Point(12, 167);
+            this.txtLocationSegment.Name = "txtLocationSegment";
+            this.txtLocationSegment.Size = new System.Drawing.Size(219, 20);
+            this.txtLocationSegment.TabIndex = 17;
+            this.txtLocationSegment.Text = "Имя физ.лица/наименование юр.лица ";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(1028, 450);
+            this.Controls.Add(this.txtLocationSegment);
+            this.Controls.Add(this.txtlocationNumber);
+            this.Controls.Add(this.txtLocationName);
+            this.Controls.Add(this.btnSaveToFile);
             this.Controls.Add(this.dataListViewEquipment);
             this.Controls.Add(this.btnExportToExcel);
             this.Controls.Add(this.txtSearchCategory);
@@ -223,6 +265,10 @@ namespace EquipmentManagementApp
         private System.Windows.Forms.TextBox txtSearchCategory;
         private System.Windows.Forms.Button btnExportToExcel;
         private BrightIdeasSoftware.DataListView dataListViewEquipment;
+        private System.Windows.Forms.Button btnSaveToFile;
+        private System.Windows.Forms.TextBox txtLocationName;
+        private System.Windows.Forms.TextBox txtlocationNumber;
+        private System.Windows.Forms.TextBox txtLocationSegment;
     }
 }
 
