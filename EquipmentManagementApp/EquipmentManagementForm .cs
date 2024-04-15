@@ -9,7 +9,7 @@ namespace EquipmentManagementApp
 {
     public partial class Form1 : Form
     {
-        private EquipmentManager equipmentManager; 
+        private EquipmentManager equipmentManager;
 
         public Form1()
         {
@@ -41,11 +41,17 @@ namespace EquipmentManagementApp
             locationSegmentColumn.AspectGetter = delegate (object x) { return ((Equipment)x).Location?.Segment; };
 
             dataListViewEquipment.Columns.AddRange(new OLVColumn[] {
-        serialNumberColumn, nameColumn, categoryColumn, isFunctionalColumn,
-        locationNumberColumn, locationNameColumn, locationSegmentColumn
-    });
+                serialNumberColumn, nameColumn, categoryColumn, isFunctionalColumn,
+                locationNumberColumn, locationNameColumn, locationSegmentColumn
+            });
 
-            dataListViewEquipment.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
+            dataListViewEquipment.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
+
+            foreach (OLVColumn column in new List<OLVColumn> { serialNumberColumn, nameColumn, categoryColumn, isFunctionalColumn, locationNumberColumn, locationNameColumn, locationSegmentColumn })
+            {
+                column.Width = column.Width; 
+            }
+
             SetColumnHeaderFont();
         }
 
@@ -65,7 +71,7 @@ namespace EquipmentManagementApp
 
         private void ImportDataFromExcel()
         {
-            string filePath = "Equipment.xlsx"; 
+            string filePath = "Equipment.xlsx";
             try
             {
                 if (File.Exists(filePath))
@@ -73,7 +79,7 @@ namespace EquipmentManagementApp
                     equipmentManager.ImportFromExcel(filePath);
                     MessageBox.Show("Импорт данных из Excel завершен", "Сообщение", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     UpdateListViewData();
-                    dataListViewEquipment.SetObjects(equipmentManager.GetEquipmentList()); 
+                    dataListViewEquipment.SetObjects(equipmentManager.GetEquipmentList());
                 }
                 else
                 {
@@ -107,23 +113,23 @@ namespace EquipmentManagementApp
                 string name = txtName.Text;
                 string category = txtCategory.Text;
                 bool isFunctional = chkIsFunctional.Checked;
-                string locationName = txtLocationName.Text; 
+                string locationName = txtLocationName.Text;
                 int locationNumber = 0;
                 string locationSegment = txtLocationSegment.Text;
                 int.TryParse(txtlocationNumber.Text, out locationNumber);
                 if (string.IsNullOrWhiteSpace(serialNumber) || string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(category) ||
-                    string.IsNullOrWhiteSpace(locationName) || string.IsNullOrWhiteSpace(locationSegment) )
+                    string.IsNullOrWhiteSpace(locationName) || string.IsNullOrWhiteSpace(locationSegment))
                 {
                     MessageBox.Show("Пожалуйста, заполните все поля корректно.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
-                
+
                 Location newLocation = new Location
                 {
                     Number = locationNumber,
                     Name = locationName,
                     Segment = locationSegment
-                }; 
+                };
 
                 Equipment newEquipment = new Equipment
                 {
@@ -168,7 +174,7 @@ namespace EquipmentManagementApp
             {
                 string currentSerialNumber = selectedEquipment.SerialNumber;
 
- 
+
                 selectedEquipment.SerialNumber = txtSerialNumber.Text;
                 selectedEquipment.Name = txtName.Text;
                 selectedEquipment.Category = txtCategory.Text;
@@ -317,6 +323,9 @@ namespace EquipmentManagementApp
             }
         }
 
-
+        private void showAllData_Click(object sender, EventArgs e)
+        {
+            UpdateListViewData();
+        }
     }
 }
