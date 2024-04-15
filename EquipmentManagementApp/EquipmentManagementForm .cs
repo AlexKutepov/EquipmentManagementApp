@@ -1,9 +1,9 @@
 ﻿using BrightIdeasSoftware;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
-
 
 namespace EquipmentManagementApp
 {
@@ -17,25 +17,63 @@ namespace EquipmentManagementApp
             equipmentManager = new EquipmentManager();
             dataListViewEquipment.DataSource = equipmentManager.GetEquipmentList();
             ImportDataFromExcel();
-            InitializeDataListView();
+            InitializeColumns();
+            UpdateListViewData();
         }
-        private void InitializeDataListView()
+        private void InitializeColumns()
         {
+            dataListViewEquipment.Columns.Clear();
 
-            dataListViewEquipment.SetObjects(equipmentManager.GetEquipmentList());
+            OLVColumn serialNumberColumn = new OLVColumn("Серийный номер", "SerialNumber");
+            OLVColumn nameColumn = new OLVColumn("Наименование", "Name");
+            OLVColumn categoryColumn = new OLVColumn("Категория", "Category");
+            OLVColumn isFunctionalColumn = new OLVColumn("Рабочий/не рабочий", "IsFunctional");
+            OLVColumn locationNumberColumn = new OLVColumn("Номер склада/ответственного", "Location.Number");
+            OLVColumn locationNameColumn = new OLVColumn("Название склада/ФИО ответственного", "Location.Name");
+            OLVColumn locationSegmentColumn = new OLVColumn("Имя физ. лица/наименование юр. лица", "Location.Segment");
+
+            serialNumberColumn.AspectGetter = delegate (object x) { return ((Equipment)x).SerialNumber; };
+            nameColumn.AspectGetter = delegate (object x) { return ((Equipment)x).Name; };
+            categoryColumn.AspectGetter = delegate (object x) { return ((Equipment)x).Category; };
+            isFunctionalColumn.AspectGetter = delegate (object x) { return ((Equipment)x).IsFunctional ? "Да" : "Нет"; };
+            locationNumberColumn.AspectGetter = delegate (object x) { return ((Equipment)x).Location?.Number.ToString(); };
+            locationNameColumn.AspectGetter = delegate (object x) { return ((Equipment)x).Location?.Name; };
+            locationSegmentColumn.AspectGetter = delegate (object x) { return ((Equipment)x).Location?.Segment; };
+
+            dataListViewEquipment.Columns.AddRange(new OLVColumn[] {
+        serialNumberColumn, nameColumn, categoryColumn, isFunctionalColumn,
+        locationNumberColumn, locationNameColumn, locationSegmentColumn
+    });
+
             dataListViewEquipment.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
+            SetColumnHeaderFont();
         }
 
+
+        private void UpdateListViewData()
+        {
+            dataListViewEquipment.SetObjects(equipmentManager.GetEquipmentList());
+        }
+
+        private void SetColumnHeaderFont()
+        {
+            foreach (OLVColumn column in dataListViewEquipment.Columns)
+            {
+                column.HeaderFont = new Font("Arial", 10, FontStyle.Bold);
+            }
+        }
 
         private void ImportDataFromExcel()
         {
-            string filePath = "Equipment.xlsx"; // Путь к файлу Excel
+            string filePath = "Equipment.xlsx"; 
             try
             {
                 if (File.Exists(filePath))
                 {
                     equipmentManager.ImportFromExcel(filePath);
                     MessageBox.Show("Импорт данных из Excel завершен", "Сообщение", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    UpdateListViewData();
+                    dataListViewEquipment.SetObjects(equipmentManager.GetEquipmentList()); 
                 }
                 else
                 {
@@ -52,16 +90,15 @@ namespace EquipmentManagementApp
 
         private void ClearFields()
         {
-            txtSerialNumber.Text = "ввод серийного номера";
-            txtName.Text = "ввод названия";
-            txtCategory.Text = "ввод категории";
+            txtSerialNumber.Text = "";
+            txtName.Text = "";
+            txtCategory.Text = "";
             chkIsFunctional.Checked = false;
-            txtLocationName.Text = "Название склада/Фио отвественного";
-            txtlocationNumber.Text = "Номер склада/отвественного (число)";
-            txtLocationSegment.Text = "Имя физ.лица/наименование юр.лица";
+            txtLocationName.Text = "";
+            txtlocationNumber.Text = "";
+            txtLocationSegment.Text = "";
         }
 
-        // В классе Form1 добавим текстовые поля для ввода местоположения
         private void btnAddEquipment_Click_1(object sender, EventArgs e)
         {
             try
@@ -74,7 +111,6 @@ namespace EquipmentManagementApp
                 int locationNumber = 0;
                 string locationSegment = txtLocationSegment.Text;
                 int.TryParse(txtlocationNumber.Text, out locationNumber);
-                // Валидация пользовательского ввода
                 if (string.IsNullOrWhiteSpace(serialNumber) || string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(category) ||
                     string.IsNullOrWhiteSpace(locationName) || string.IsNullOrWhiteSpace(locationSegment) )
                 {
@@ -101,7 +137,8 @@ namespace EquipmentManagementApp
                 equipmentManager.AddEquipment(newEquipment);
 
                 ClearFields();
-                InitializeDataListView();
+                UpdateListViewData();
+                dataListViewEquipment.SetObjects(equipmentManager.GetEquipmentList());
                 MessageBox.Show("Позиция добавлена", "Сообщение", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception ex)
@@ -118,7 +155,8 @@ namespace EquipmentManagementApp
             if (selectedEquipment != null)
             {
                 equipmentManager.RemoveEquipment(selectedEquipment.SerialNumber);
-                InitializeDataListView();
+                UpdateListViewData();
+                dataListViewEquipment.SetObjects(equipmentManager.GetEquipmentList());
                 MessageBox.Show("Позиция удалена", "Сообщение", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
@@ -128,12 +166,26 @@ namespace EquipmentManagementApp
             Equipment selectedEquipment = (Equipment)dataListViewEquipment.SelectedObject;
             if (selectedEquipment != null)
             {
+                string currentSerialNumber = selectedEquipment.SerialNumber;
+
+ 
+                selectedEquipment.SerialNumber = txtSerialNumber.Text;
                 selectedEquipment.Name = txtName.Text;
                 selectedEquipment.Category = txtCategory.Text;
                 selectedEquipment.IsFunctional = chkIsFunctional.Checked;
-                equipmentManager.UpdateEquipment(selectedEquipment);
+
+                selectedEquipment.Location.Name = txtLocationName.Text;
+                int locationNumber;
+                if (int.TryParse(txtlocationNumber.Text, out locationNumber))
+                {
+                    selectedEquipment.Location.Number = locationNumber;
+                }
+                selectedEquipment.Location.Segment = txtLocationSegment.Text;
+
+                equipmentManager.UpdateEquipment(currentSerialNumber, selectedEquipment);
+
                 ClearFields();
-                InitializeDataListView();
+                UpdateListViewData();
                 MessageBox.Show("Позиция отредактирована", "Сообщение", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
@@ -143,17 +195,12 @@ namespace EquipmentManagementApp
             Equipment selectedEquipment = (Equipment)dataListViewEquipment.SelectedObject;
             if (selectedEquipment != null)
             {
-                // Логика перемещения оборудования
-                // Например, можно вызвать метод ReallocateEquipment, если он уже реализован в классе EquipmentManager
-                // equipmentManager.ReallocateEquipment(selectedEquipment.SerialNumber, newLocation);
                 MessageBox.Show("Позиция перемещена", "Сообщение", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
             }
         }
         private void dataListViewEquipment_SelectedIndexChanged(object sender, EventArgs e)
         {
-            // Логика, которая будет выполняться при изменении выделенного элемента в списке оборудования
-            // Например, можно отобразить информацию о выбранном оборудовании в соответствующих текстовых полях
             Equipment selectedEquipment = (Equipment)dataListViewEquipment.SelectedObject;
             if (selectedEquipment != null)
             {
@@ -161,26 +208,55 @@ namespace EquipmentManagementApp
                 txtName.Text = selectedEquipment.Name;
                 txtCategory.Text = selectedEquipment.Category;
                 chkIsFunctional.Checked = selectedEquipment.IsFunctional;
+                if (selectedEquipment.Location != null)
+                {
+                    txtLocationName.Text = selectedEquipment.Location.Name;
+                    txtlocationNumber.Text = selectedEquipment.Location.Number.ToString();
+                    txtLocationSegment.Text = selectedEquipment.Location.Segment;
+                }
+                else
+                {
+                    txtLocationName.Text = string.Empty;
+                    txtlocationNumber.Text = string.Empty;
+                    txtLocationSegment.Text = string.Empty;
+                }
             }
             else
             {
-                // Очистить текстовые поля, если ничего не выбрано
                 ClearFields();
             }
         }
+
 
         private void btnSearchByLocation_Click(object sender, EventArgs e)
         {
             string location = txtLocation.Text;
             List<Equipment> equipmentList = equipmentManager.SearchByLocation(location);
-            dataListViewEquipment.SetObjects(equipmentList);
+            if (equipmentList.Count == 0)
+            {
+                MessageBox.Show("Данные не найдены", "Сообщение", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else
+            {
+                dataListViewEquipment.SetObjects(equipmentList);
+                dataListViewEquipment.SelectedIndex = 0;
+            }
         }
+
 
         private void btnSearchByCategory_Click(object sender, EventArgs e)
         {
             string category = txtSearchCategory.Text;
             List<Equipment> equipmentList = equipmentManager.SearchByCategory(category);
-            dataListViewEquipment.SetObjects(equipmentList);
+            if (equipmentList.Count == 0)
+            {
+                MessageBox.Show("Данные не найдены", "Сообщение", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else
+            {
+                dataListViewEquipment.SetObjects(equipmentList);
+                dataListViewEquipment.SelectedIndex = 0;
+            }
         }
 
         private void btnExportToExcel_Click_1(object sender, EventArgs e)

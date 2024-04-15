@@ -40,6 +40,16 @@ namespace EquipmentManagementApp
             }
         }
 
+        public void UpdateEquipment(string currentSerialNumber, Equipment updatedEquipment)
+        {
+            int index = equipmentList.FindIndex(e => e.SerialNumber == currentSerialNumber);
+            if (index != -1)
+            {
+                // Заменяем оборудование в списке по текущему серийному номеру
+                equipmentList[index] = updatedEquipment;
+            }
+        }
+
         public void MoveEquipmentToLocation(string serialNumber, Location newLocation)
         {
             var equipment = equipmentList.Find(e => e.SerialNumber == serialNumber);
@@ -88,10 +98,10 @@ namespace EquipmentManagementApp
                     worksheet.Cells[row, 1].Value = equipment.SerialNumber;
                     worksheet.Cells[row, 2].Value = equipment.Name;
                     worksheet.Cells[row, 3].Value = equipment.Category;
-                    worksheet.Cells[row, 4].Value = equipment.IsFunctional ? "Нет" : "Да";
-                    worksheet.Cells[row, 5].Value = equipment.Location.Number;
-                    worksheet.Cells[row, 6].Value = equipment.Location.Name;
-                    worksheet.Cells[row, 7].Value = equipment.Location.Segment;
+                    worksheet.Cells[row, 4].Value = equipment.IsFunctional ? "Да" : "Нет";
+                    worksheet.Cells[row, 5].Value = equipment.Location?.Number;
+                    worksheet.Cells[row, 6].Value = equipment.Location?.Name;
+                    worksheet.Cells[row, 7].Value = equipment.Location?.Segment;
                     row++;
                 }
 
@@ -100,6 +110,7 @@ namespace EquipmentManagementApp
             }
         }
 
+
         public void ImportFromExcel(string filePath)
         {
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
@@ -107,6 +118,9 @@ namespace EquipmentManagementApp
             {
                 var worksheet = package.Workbook.Worksheets["Equipment"];
                 int rowCount = worksheet.Dimension.Rows;
+
+             
+                equipmentList.Clear();
 
                 for (int row = 2; row <= rowCount; row++)
                 {
@@ -138,6 +152,7 @@ namespace EquipmentManagementApp
                 }
             }
         }
+
 
 
     }
