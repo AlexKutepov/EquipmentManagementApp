@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace EquipmentManagementApp
@@ -14,12 +15,22 @@ namespace EquipmentManagementApp
         public Form1()
         {
             InitializeComponent();
+            InitializeEquipmentManagerAsync();
+            StartPosition = FormStartPosition.CenterScreen; 
+
+        }
+
+
+        private async Task InitializeEquipmentManagerAsync()
+        {
             equipmentManager = new EquipmentManager();
             dataListViewEquipment.DataSource = equipmentManager.GetEquipmentList();
-            ImportDataFromExcel();
+            await ImportDataFromExcelAsync();
             InitializeColumns();
             UpdateListViewData();
         }
+
+
         private void InitializeColumns()
         {
             dataListViewEquipment.Columns.Clear();
@@ -69,41 +80,30 @@ namespace EquipmentManagementApp
             }
         }
 
-        private void ImportDataFromExcel()
+        private async Task ImportDataFromExcelAsync()
         {
             string filePath = "Equipment.xlsx";
             try
             {
                 if (File.Exists(filePath))
                 {
-                    equipmentManager.ImportFromExcel(filePath);
+                    await Task.Run(() => equipmentManager.ImportFromExcel(filePath));
                     MessageBox.Show("Импорт данных из Excel завершен", "Сообщение", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     UpdateListViewData();
                     dataListViewEquipment.SetObjects(equipmentManager.GetEquipmentList());
                 }
                 else
                 {
-                    MessageBox.Show("Файл в каталоге не найден: Equipment.xlsx", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    LogError("Файл не найден: Equipment.xlsx");
+                    HandleError("Файл не найден: Equipment.xlsx");
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Ошибка импорта из Exel: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                LogError($"Ошибка импорта из Exel: {ex.Message}");
+                   HandleError($"Ошибка импорта из Exel: {ex.Message}");
             }
         }
 
-        private void ClearFields()
-        {
-            txtSerialNumber.Text = "";
-            txtName.Text = "";
-            txtCategory.Text = "";
-            chkIsFunctional.Checked = false;
-            txtLocationName.Text = "";
-            txtlocationNumber.Text = "";
-            txtLocationSegment.Text = "";
-        }
+
 
         private void btnAddEquipment_Click_1(object sender, EventArgs e)
         {
@@ -120,7 +120,7 @@ namespace EquipmentManagementApp
                 if (string.IsNullOrWhiteSpace(serialNumber) || string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(category) ||
                     string.IsNullOrWhiteSpace(locationName) || string.IsNullOrWhiteSpace(locationSegment))
                 {
-                    MessageBox.Show("Пожалуйста, заполните все поля корректно.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    HandleError("Пожалуйста, заполните все поля корректно.");
                     return;
                 }
 
@@ -149,8 +149,7 @@ namespace EquipmentManagementApp
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Ошибка добавления позиции: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                LogError($"Ошибка добавления позиции: {ex.Message}");
+                HandleError($"Ошибка добавления позиции: {ex.Message}");
             }
         }
 
@@ -181,11 +180,19 @@ namespace EquipmentManagementApp
                 selectedEquipment.IsFunctional = chkIsFunctional.Checked;
 
                 selectedEquipment.Location.Name = txtLocationName.Text;
-                int locationNumber;
-                if (int.TryParse(txtlocationNumber.Text, out locationNumber))
-                {
-                    selectedEquipment.Location.Number = locationNumber;
+                try  {
+                    int locationNumber;
+                    if (int.TryParse(txtlocationNumber.Text, out locationNumber))
+                    {
+                        selectedEquipment.Location.Number = locationNumber;
+                    }
                 }
+                catch (Exception ex)
+                {
+                    HandleError($"Ошибка, номер склада/отвественного должен быть числом: {ex.Message}");
+                 
+                }
+
                 selectedEquipment.Location.Segment = txtLocationSegment.Text;
 
                 equipmentManager.UpdateEquipment(currentSerialNumber, selectedEquipment);
@@ -201,6 +208,24 @@ namespace EquipmentManagementApp
             Equipment selectedEquipment = (Equipment)dataListViewEquipment.SelectedObject;
             if (selectedEquipment != null)
             {
+                string currentSerialNumber = selectedEquipment.SerialNumber;
+                selectedEquipment.Location.Name = txtLocationName.Text;
+                try
+                {
+                    int locationNumber;
+                    if (int.TryParse(txtlocationNumber.Text, out locationNumber))
+                    {
+                        selectedEquipment.Location.Number = locationNumber;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    HandleError($"Ошибка, номер склада/отвественного должен быть числом. {ex.Message}");
+                }
+                equipmentManager.UpdateEquipment(currentSerialNumber, selectedEquipment);
+
+                ClearFields();
+                UpdateListViewData();
                 MessageBox.Show("Позиция перемещена", "Сообщение", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
             }
@@ -281,8 +306,7 @@ namespace EquipmentManagementApp
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"Ошибка выгрузки данных в Excel: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    LogError($"Ошибка выгрузки данных в Excel: {ex.Message}");
+                      HandleError($"Ошибка выгрузки данных в Excel: {ex.Message}");
                 }
             }
         }
@@ -296,8 +320,7 @@ namespace EquipmentManagementApp
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Ошибка сохранения данных в файл с программой: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                LogError($"Ошибка сохранения данных в файл с программой: {ex.Message}");
+                 HandleError($"Ошибка сохранения данных в файл с программой: {ex.Message}");
             }
         }
 
@@ -327,5 +350,23 @@ namespace EquipmentManagementApp
         {
             UpdateListViewData();
         }
+
+        private void ClearFields()
+        {
+            txtSerialNumber.Text = "";
+            txtName.Text = "";
+            txtCategory.Text = "";
+            chkIsFunctional.Checked = false;
+            txtLocationName.Text = "";
+            txtlocationNumber.Text = "";
+            txtLocationSegment.Text = "";
+        }
+
+        private void HandleError(string errorMessage)
+        {
+            MessageBox.Show(errorMessage, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            LogError(errorMessage);
+        }
+
     }
 }

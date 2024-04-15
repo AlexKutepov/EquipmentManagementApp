@@ -45,7 +45,6 @@ namespace EquipmentManagementApp
             int index = equipmentList.FindIndex(e => e.SerialNumber == currentSerialNumber);
             if (index != -1)
             {
-                // Заменяем оборудование в списке по текущему серийному номеру
                 equipmentList[index] = updatedEquipment;
             }
         }
@@ -82,7 +81,6 @@ namespace EquipmentManagementApp
             {
                 var worksheet = package.Workbook.Worksheets.Add("Equipment");
 
-                // Headers
                 worksheet.Cells[1, 1].Value = "Серийный номер";
                 worksheet.Cells[1, 2].Value = "Наименование";
                 worksheet.Cells[1, 3].Value = "Категория";
@@ -91,7 +89,6 @@ namespace EquipmentManagementApp
                 worksheet.Cells[1, 6].Value = "Название склада/Фио отвественного";
                 worksheet.Cells[1, 7].Value = "Имя физ.лица/наименование юр.лица";
 
-                // Data
                 int row = 2;
                 foreach (var equipment in equipmentList)
                 {
@@ -105,7 +102,6 @@ namespace EquipmentManagementApp
                     row++;
                 }
 
-                // Save Excel file
                 package.SaveAs(new FileInfo(filePath));
             }
         }

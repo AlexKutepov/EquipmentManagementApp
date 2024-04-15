@@ -261,7 +261,7 @@ namespace EquipmentManagementApp
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(3, 2);
+            this.label1.Location = new System.Drawing.Point(7, 2);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(129, 13);
             this.label1.TabIndex = 18;
@@ -279,7 +279,7 @@ namespace EquipmentManagementApp
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(7, 91);
+            this.label3.Location = new System.Drawing.Point(7, 92);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(87, 13);
             this.label3.TabIndex = 20;
@@ -288,7 +288,7 @@ namespace EquipmentManagementApp
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(3, 154);
+            this.label4.Location = new System.Drawing.Point(7, 154);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(202, 13);
             this.label4.TabIndex = 21;
@@ -297,7 +297,7 @@ namespace EquipmentManagementApp
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(3, 196);
+            this.label5.Location = new System.Drawing.Point(7, 196);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(198, 13);
             this.label5.TabIndex = 22;
@@ -306,7 +306,7 @@ namespace EquipmentManagementApp
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(3, 238);
+            this.label6.Location = new System.Drawing.Point(7, 238);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(205, 13);
             this.label6.TabIndex = 23;
@@ -317,9 +317,9 @@ namespace EquipmentManagementApp
             this.label7.AutoSize = true;
             this.label7.Location = new System.Drawing.Point(245, 2);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(227, 13);
+            this.label7.Size = new System.Drawing.Size(211, 13);
             this.label7.TabIndex = 24;
-            this.label7.Text = "Ввод местоположения позиции для поиска";
+            this.label7.Text = "Ввод склада/отвественного для поиска";
             // 
             // label8
             // 
